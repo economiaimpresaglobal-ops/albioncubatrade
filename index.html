@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALBION CUBA TRADE - Mercado de Comercio P2P</title>
+  
+  <meta name="description" content="Plataforma de comercio P2P para la comunidad de Albion Online Cuba. Compra y vende plata, objetos y servicios de forma rápida y segura.">
+  <meta name="keywords" content="Albion Online, Cuba, Comercio, Plata, MNO, Transfermóvil, EnZona, P2P">
+  <meta property="og:title" content="ALBION CUBA TRADE">
+  <meta property="og:description" content="Comercia plata y objetos de Albion Online en Cuba.">
+  <meta property="og:type" content="website">
+
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: #0b1329;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #f1f5f9;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+
+    .header {
+      background: rgba(11, 19, 41, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0.8rem 2rem;
+      min-height: 70px;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .cuba-flag {
+      width: 32px;
+      height: 20px;
+      border-radius: 3px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #f8fafc;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 1002;
+      transition: all 0.2s ease;
+    }
+
+    .hamburger:active {
+      transform: scale(0.95);
+    }
+
+    .hamburger .bar {
+      width: 20px;
+      height: 2px;
+      background-color: #38bdf8;
+      border-radius: 2px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-menu {
+      position: fixed;
+      top: 0;
+      right: -280px;
+      width: 260px;
+      height: 100vh;
+      background: #0b1329;
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 5rem 1rem 2rem 1rem;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1001;
+      gap: 0.4rem;
+      list-style: none;
+      margin: 0;
+    }
+
+    .nav-menu.active { 
+      right: 0; 
+    }
+
+    .hamburger.active {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    .hamburger.active .bar { background-color: #f87171; }
+    .hamburger.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.active .bar:nth-child(2) { opacity: 0; }
+    .hamburger.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav-link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.75rem 0.9rem;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-link-icon {
+      margin-right: 0.6rem;
+    }
+
+    .nav-link::after {
+      content: '›';
+      font-size: 1.1rem;
+      color: #475569;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: #38bdf8;
+      background-color: rgba(56, 189, 248, 0.08);
+      font-weight: 600;
+    }
+
+    .nav-link.active::after {
+      color: #38bdf8;
+    }
+
+    .nav-link.admin-btn {
+      color: #f43f5e;
+      border: 1px dashed rgba(244, 63, 94, 0.3);
+    }
+
+    .nav-link.admin-btn:hover {
+      background-color: rgba(244, 63, 94, 0.1);
+      color: #fb7185;
+    }
+
+    .nav-link.change-pass-btn {
+      color: #f59e0b;
+      background-color: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      display: none;
+    }
+
+    .nav-link.logout-menu-btn {
+      color: #f43f5e;
+      background-color: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      display: none;
+    }
+
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(11, 19, 41, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .menu-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    @media (min-width: 1100px) {
+      .hamburger { display: none; }
+      .nav-menu {
+        position: static;
+        height: auto;
+        width: auto;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        flex-direction: row;
+        padding: 0;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .nav-link {
+        width: auto;
+        display: inline-flex;
+        padding: 0.55rem 0.85rem;
+        border-radius: 8px;
+      }
+      .nav-link::after { content: ''; }
+    }
+
+    .page-section {
+      display: none;
+      min-height: 100vh;
+      padding-top: 70px;
+      width: 100%;
+    }
+
+    .page-section.active {
+      display: block;
+    }
+
+    .hero-fullscreen {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 70px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    .fullscreen-gif {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0.6;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(11, 19, 41, 0.4) 0%, rgba(11, 19, 41, 0.9) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 1rem;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-subtitle {
+      color: #94a3b8;
+      max-width: 700px;
+      font-size: 1.15rem;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 5rem 2rem;
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-desc {
+      color: #64748b;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .card {
+      background: #131f37;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .admin-only-card {
+      display: none;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      background: rgba(19, 31, 55, 0.96);
+      margin-bottom: 2rem;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #f8fafc;
+      margin-bottom: 0.5rem;
+    }
+
+    .market-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: #f8fafc;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .tab-btn.active {
+      background: #38bdf8;
+      color: #0b1329;
+      border-color: #38bdf8;
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .social-card {
+      background: #131f37;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .social-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .admin-form-grid .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: #cbd5e1;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .help-text {
+      font-size: 0.78rem;
+      color: #38bdf8;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #0b1329;
+      color: #f8fafc;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    button[type="submit"], .btn-save {
+      width: 100%;
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    button[type="submit"]:hover, .btn-save:hover {
+      background: #0369a1;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(11, 19, 41, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #131f37;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 20px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      margin: auto;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+      color: #f8fafc;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.75rem;
+      border-radius: 10px;
+      font-weight: 600;
+      width: 50%;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-primary {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 10px;
+      font-weight: 600;
+      width: 50%;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #0369a1;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    .item-card {
+      background: #131f37;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+
+    .item-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(56, 189, 248, 0.2);
+    }
+
+    .item-badge {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .badge-silver { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-items { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-accounts { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .badge-services { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    .item-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #f8fafc;
+      margin-bottom: 0.35rem;
+    }
+
+    .item-price {
+      font-size: 1.2rem;
+      color: #38bdf8;
+      font-weight: 700;
+      margin-bottom: 0.85rem;
+    }
+
+    .item-desc {
+      font-size: 0.88rem;
+      color: #94a3b8;
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    .item-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .btn-contact {
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn-contact:hover {
+      opacity: 0.9;
+    }
+
+    .btn-delete {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 0.55rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .btn-delete:hover {
+      background: rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-whatsapp { background: #16a34a; }
+    .btn-telegram { background: #0284c7; }
+    .btn-discord { background: #4f46e5; }
+    .btn-instagram { background: #c13584; }
+    .btn-facebook { background: #2563eb; }
+    .btn-generic { background: #0d9488; }
+
+    .info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1.1rem 1.25rem;
+      background: #0b1329;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 14px;
+    }
+
+    .info-icon {
+      font-size: 1.5rem;
+    }
+
+    .info-text strong {
+      color: #f8fafc;
+      display: block;
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+
+    .info-text span {
+      color: #64748b;
+      font-size: 0.88rem;
+    }
+
+    .toast-notification {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #10b981;
+      color: #ffffff;
+      padding: 0.9rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 4000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .toast-notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .navbar { padding: 0.9rem 1.25rem; }
+      .admin-form-grid { grid-template-columns: 1fr; }
+      .admin-form-grid .form-group.full-width { grid-column: span 1; }
+      .toast-notification { bottom: 1.5rem; right: 1.5rem; left: 1.5rem; justify-content: center; }
+      .container { padding: 1.5rem 1.25rem 3rem 1.25rem; }
+      .hero-title { font-size: 2.2rem; }
+      .hero-subtitle { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <nav class="navbar">
+      <div class="brand-container" id="brand-btn">
+        <svg class="cuba-flag" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="300" fill="#002a8f"/>
+          <rect y="60" width="600" height="60" fill="#ffffff"/>
+          <rect y="180" width="600" height="60" fill="#ffffff"/>
+          <polygon points="0,0 259.8,150 0,300" fill="#cb161c"/>
+          <polygon points="86.6,150 61.1,131.5 70.8,101.5 45.4,120 19.9,101.5 29.6,131.5 4.2,150 35.1,150 45.4,180 55.7,150" fill="#ffffff" transform="rotate(-18 86.6 150) translate(22, 0)"/>
+        </svg>
+        <span class="brand">ALBION CUBA TRADE</span>
+      </div>
+      
+      <button class="hamburger" id="hamburger-btn" aria-label="Abrir menú">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <div class="menu-overlay" id="menu-overlay"></div>
+
+      <ul class="nav-menu" id="nav-menu">
+        <li>
+          <button class="nav-link active" data-target="inicio">
+            <span><span class="nav-link-icon">🏠</span> Inicio</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-link" data-target="mercado">
+            <span><span class="nav-link-icon">⚖️</span> Mercado</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-link" data-target="precio">
+            <span><span class="nav-link-icon">📈</span> Tasas de Cambio</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-link" data-target="metodo-pago">
+            <span><span class="nav-link-icon">💳</span> Métodos de Pago</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-link" data-target="red-social">
+            <span><span class="nav-link-icon">📢</span>Comunidad</span>
+          </button>
+        </li>
+        <li>
+          <a class="nav-link" href="https://t.me/portafolio_ulisestriana" target="_blank" rel="noopener noreferrer">
+            <span><span class="nav-link-icon">👔</span> CEO Portafolio</span>
+          </a>
+        </li>
+        <li>
+          <button class="nav-link admin-btn" id="admin-trigger">
+            <span><span class="nav-link-icon">🔒</span> Acceso Admin</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-link change-pass-btn" id="menu-change-pass-btn">
+            <span><span class="nav-link-icon">🔑</span> Cambiar Clave</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-link logout-menu-btn" id="menu-logout-btn">
+            <span><span class="nav-link-icon">🚪</span> Salir</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="inicio" class="page-section active" style="padding-top: 70px;">
+    <div class="hero-fullscreen">
+      <img 
+        src="https://cdnb.artstation.com/p/assets/images/images/071/733/385/original/flor-coletta-armor-knight-adventurer-albion-gif.gif?1705837562" 
+        alt="Albion Trade" 
+        class="fullscreen-gif"
+        referrerpolicy="no-referrer"
+      />
+      <div class="hero-overlay">
+        <h1 class="hero-title">ALBION CUBA TRADE</h1>
+        <p class="hero-subtitle">Plataforma P2P para la comunidad de Albion Online en Cuba. Comercio directo de plata, equipo y servicios.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="mercado" class="page-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Mercado P2P</h2>
+        <p class="section-desc">Consulta las ofertas disponibles o contacta directamente.</p>
+      </div>
+
+      <div class="card admin-only-card" id="admin-card">
+        <h3 class="card-title" style="margin-bottom: 1.25rem;">Nueva Publicación (Panel Administrador)</h3>
+        
+        <form id="item-form">
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label for="item-category">Categoría</label>
+              <select id="item-category" required>
+                <option value="silver">Silver (Plata)</option>
+                <option value="items">Ítems / Objetos</option>
+                <option value="accounts">Cuentas</option>
+                <option value="services">Servicios</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="item-title">Título</label>
+              <input type="text" id="item-title" maxlength="60" placeholder="Ej: 25M Plata / Set Caballero T8.3 / Servicio HCE" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="item-price">Precio</label>
+              <input type="text" id="item-price" maxlength="40" placeholder="Ej: $1.15 USD / 1M o 400 CUP / 1M" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="social-platform">Vía de Contacto</label>
+              <select id="social-platform" required>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="telegram">Telegram</option>
+                <option value="discord">Discord</option>
+                <option value="facebook">Facebook</option>
+                <option value="other">Otro Enlace</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="item-link">Enlace Directo</label>
+              <span class="help-text" id="link-help">Ejemplo: https://wa.me/5350000000</span>
+              <input type="url" id="item-link" maxlength="250" placeholder="https://wa.me/5350000000" required>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="item-desc">Detalles</label>
+              <textarea id="item-desc" rows="3" maxlength="300" placeholder="Lugar de entrega, especificaciones o condiciones del intercambio..."></textarea>
+            </div>
+          </div>
+          
+          <button type="submit" id="submit-btn">Publicar Oferta</button>
+        </form>
+      </div>
+
+      <div class="market-tabs">
+        <button class="tab-btn active" data-category="all">Todos</button>
+        <button class="tab-btn" data-category="silver">Silver</button>
+        <button class="tab-btn" data-category="items">Ítems</button>
+        <button class="tab-btn" data-category="accounts">Cuentas</button>
+        <button class="tab-btn" data-category="services">Servicios</button>
+      </div>
+
+      <h3 class="card-title" style="margin-bottom: 1rem;" id="market-section-title">Ofertas Activas</h3>
+      <div id="items-grid" class="grid"></div>
+    </div>
+  </section>
+
+  <section id="precio" class="page-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Tasas de Referencia</h2>
+        <p class="section-desc">Valores promedios estimados en el mercado P2P actual.</p>
+      </div>
+
+      <div class="card admin-only-card">
+        <h3 class="card-title" style="margin-bottom: 1.25rem;">Editar Tasas de Referencia</h3>
+        <form id="edit-rates-form">
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label>Tasa COMPRA (Ej. CUP/USD)</label>
+              <input type="text" id="edit-rate-buy" placeholder="Ej: 1M Plata = 380 CUP / $1.10 USD" required>
+            </div>
+            <div class="form-group">
+              <label>Tasa VENTA (Ej. CUP/USD)</label>
+              <input type="text" id="edit-rate-sell" placeholder="Ej: 1M Plata = 420 CUP / $1.25 USD" required>
+            </div>
+            <div class="form-group full-width">
+              <label>Suscripción Premium</label>
+              <input type="text" id="edit-rate-premium" required>
+            </div>
+          </div>
+          <button type="submit" class="btn-save">Guardar Cambios de Tasas</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <ul class="info-list">
+          <li class="info-item">
+            <span class="info-icon">📉</span>
+            <div class="info-text">
+              <strong>Tasa COMPRA (Hoy)</strong>
+              <span id="display-rate-buy">1M Plata = 380 CUP / $1.10 USD</span>
+            </div>
+          </li>
+          <li class="info-item">
+            <span class="info-icon">📈</span>
+            <div class="info-text">
+              <strong>Tasa VENTA (Hoy)</strong>
+              <span id="display-rate-sell">1M Plata = 420 CUP / $1.25 USD</span>
+            </div>
+          </li>
+          <li class="info-item">
+            <span class="info-icon">💎</span>
+            <div class="info-text">
+              <strong>Suscripción Premium (30 Días)</strong>
+              <span id="display-rate-premium">Según la cotización oficial del Oro in-game.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="metodo-pago" class="page-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Métodos de Pago</h2>
+        <p class="section-desc">Plataformas aceptadas para transacciones entre jugadores.</p>
+      </div>
+
+      <div class="card admin-only-card">
+        <h3 class="card-title" style="margin-bottom: 1.25rem;">Editar Métodos de Pago</h3>
+        <form id="edit-methods-form">
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label>Transfermóvil / Saldo Movil</label>
+              <input type="text" id="edit-method-local" required>
+            </div>
+            <div class="form-group">
+              <label>Criptomonedas (USDT BEP20)</label>
+              <input type="text" id="edit-method-binance" required>
+            </div>
+            <div class="form-group full-width">
+              <label>Comercio Directo (In-Game)</label>
+              <input type="text" id="edit-method-ingame" required>
+            </div>
+          </div>
+          <button type="submit" class="btn-save">Guardar Métodos de Pago</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <ul class="info-list">
+          <li class="info-item">
+            <span class="info-icon">📱</span>
+            <div class="info-text">
+              <strong>Transfermóvil / Saldo Movil</strong>
+              <span id="display-method-local">Pagos directos en CUP o saldo bancario MLC.</span>
+            </div>
+          </li>
+          <li class="info-item">
+            <span class="info-icon">🌐</span>
+            <div class="info-text">
+              <strong>Criptomonedas (USDT BEP20)</strong>
+              <span id="display-method-binance">Transferencias sin comisiones mediante Pay ID o QR.</span>
+            </div>
+          </li>
+          <li class="info-item">
+            <span class="info-icon">⚔️</span>
+            <div class="info-text">
+              <strong>Comercio Directo (In-Game)</strong>
+              <span id="display-method-ingame">Intercambio físico de recursos e ítems en zonas seguras.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="red-social" class="page-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Canales Oficiales</h2>
+        <p class="section-desc">Redes y comunidades principales para coordinar intercambios y verificar reputación.</p>
+      </div>
+
+      <div class="card admin-only-card">
+        <h3 class="card-title" style="margin-bottom: 1.25rem;">Editar Enlaces de Redes Sociales</h3>
+        <form id="edit-socials-form">
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label>Telegram (Link)</label>
+              <input type="url" id="edit-social-tg" required>
+            </div>
+            <div class="form-group">
+              <label>WhatsApp (Link)</label>
+              <input type="url" id="edit-social-wa" required>
+            </div>
+            <div class="form-group">
+              <label>Discord (Link)</label>
+              <input type="url" id="edit-social-dc" required>
+            </div>
+            <div class="form-group">
+              <label>Instagram (Link)</label>
+              <input type="url" id="edit-social-ig" required>
+            </div>
+            <div class="form-group full-width">
+              <label>Facebook (Link)</label>
+              <input type="url" id="edit-social-fb" required>
+            </div>
+          </div>
+          <button type="submit" class="btn-save">Guardar Enlaces de Redes</button>
+        </form>
+      </div>
+
+      <div class="social-grid">
+        <div class="social-card">
+          <div>
+            <h3 class="card-title" style="margin-bottom: 0.5rem;">Comunidad en Telegram</h3>
+            <p style="color: #cbd5e1; margin-bottom: 1.5rem; font-size: 0.9rem; line-height: 1.5;">Únete a nuestro grupo de Telegram para cotizaciones rápidas, referencias y trato directo.</p>
+          </div>
+          <a id="display-link-tg" href="https://t.me/TuGrupo" target="_blank" rel="noopener noreferrer" class="btn-contact btn-telegram">
+            ✈️ Grupo de Telegram
+          </a>
+        </div>
+
+        <div class="social-card">
+          <div>
+            <h3 class="card-title" style="margin-bottom: 0.5rem;">Grupo de WhatsApp</h3>
+            <p style="color: #cbd5e1; margin-bottom: 1.5rem; font-size: 0.9rem; line-height: 1.5;">Comunidad oficial en WhatsApp para coordinar entregas e intercambios.</p>
+          </div>
+          <a id="display-link-wa" href="https://chat.whatsapp.com/TuEnlace" target="_blank" rel="noopener noreferrer" class="btn-contact btn-whatsapp">
+            💬 Grupo de WhatsApp
+          </a>
+        </div>
+
+        <div class="social-card">
+          <div>
+            <h3 class="card-title" style="margin-bottom: 0.5rem;">Servidor de Discord</h3>
+            <p style="color: #cbd5e1; margin-bottom: 1.5rem; font-size: 0.9rem; line-height: 1.5;">Canales de voz, comercio en vivo y soporte de moderadores.</p>
+          </div>
+          <a id="display-link-dc" href="https://discord.gg/TuInvitacion" target="_blank" rel="noopener noreferrer" class="btn-contact btn-discord">
+            🎮 Servidor de Discord
+          </a>
+        </div>
+
+        <div class="social-card">
+          <div>
+            <h3 class="card-title" style="margin-bottom: 0.5rem;">Página de Instagram</h3>
+            <p style="color: #cbd5e1; margin-bottom: 1.5rem; font-size: 0.9rem; line-height: 1.5;">Sigue nuestras novedades, testimonios de compradores y anuncios principales.</p>
+          </div>
+          <a id="display-link-ig" href="https://instagram.com/TuPerfil" target="_blank" rel="noopener noreferrer" class="btn-contact btn-instagram">
+            📸 Instagram Oficial
+          </a>
+        </div>
+
+        <div class="social-card">
+          <div>
+            <h3 class="card-title" style="margin-bottom: 0.5rem;">Grupo de Facebook</h3>
+            <p style="color: #cbd5e1; margin-bottom: 1.5rem; font-size: 0.9rem; line-height: 1.5;">Comunidad en Facebook para compra, venta y publicaciones diarias de objetos.</p>
+          </div>
+          <a id="display-link-fb" href="https://facebook.com/groups/TuGrupo" target="_blank" rel="noopener noreferrer" class="btn-contact btn-facebook">
+            👤 Grupo de Facebook
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div id="admin-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🔐 Acceso Administrador</h3>
+        <button class="modal-close" id="modal-close-btn">&times;</button>
+      </div>
+      <form id="admin-auth-form">
+        <div class="form-group">
+          <label for="admin-pass-input">Clave de Seguridad</label>
+          <input type="password" id="admin-pass-input" placeholder="Ingresa tu clave de acceso" autocomplete="current-password" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="modal-cancel-btn">Cancelar</button>
+          <button type="submit" class="btn-primary" id="login-submit-btn">Acceder</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="change-pass-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🔑 Cambiar Clave de Admin</h3>
+        <button class="modal-close" id="pass-modal-close-btn">&times;</button>
+      </div>
+      <form id="change-pass-form">
+        <div class="form-group">
+          <label for="new-pass-input">Nueva Clave</label>
+          <input type="password" id="new-pass-input" placeholder="Ingresa la nueva clave" required>
+        </div>
+        <div class="form-group">
+          <label for="confirm-pass-input">Confirmar Nueva Clave</label>
+          <input type="password" id="confirm-pass-input" placeholder="Confirma la nueva clave" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="pass-modal-cancel-btn">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar Clave</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-notification" class="toast-notification">
+    <span id="toast-message">Guardado con éxito</span>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, push, onValue, remove, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBzirtshh64t3fwn7039ypoCMUgbolEmqs",
+  authDomain: "albioncubatrade.firebaseapp.com",
+  databaseURL: "https://albioncubatrade-default-rtdb.firebaseio.com",
+  projectId: "albioncubatrade",
+  storageBucket: "albioncubatrade.firebasestorage.app",
+  messagingSenderId: "235418824328",
+  appId: "1:235418824328:web:4c89cb25e436edef5cf93d",
+  measurementId: "G-TNBX1QQY6Q"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+
+const db = getDatabase(app);
+
+  
+    let currentCategoryFilter = 'all';
+      let cachedProducts = [];
+
+      // Función de hashing
+      function hashPassword(str) {
+        let p = 0x811c9dc5;
+        for (let i = 0; i < str.length; i++) {
+          p ^= str.charCodeAt(i);
+          p += (p << 1) + (p << 4) + (p << 7) + (p << 8) + (p << 24);
+        }
+        return (p >>> 0).toString(16);
+      }
+
+      // Limpieza de rastros antiguos en el navegador
+      localStorage.removeItem('admin_pass_hash');
+
+      let isAdmin = sessionStorage.getItem('admin_logged_in') === 'true';
+
+      const adminCards = document.querySelectorAll('.admin-only-card');
+      const adminTrigger = document.getElementById('admin-trigger');
+      const menuLogoutBtn = document.getElementById('menu-logout-btn');
+      const menuChangePassBtn = document.getElementById('menu-change-pass-btn');
+      
+      const adminModal = document.getElementById('admin-modal');
+      const adminAuthForm = document.getElementById('admin-auth-form');
+      const adminPassInput = document.getElementById('admin-pass-input');
+      const loginSubmitBtn = document.getElementById('login-submit-btn');
+      const modalCloseBtn = document.getElementById('modal-close-btn');
+      const modalCancelBtn = document.getElementById('modal-cancel-btn');
+
+      function openModal() {
+        adminModal.classList.add('active');
+        adminPassInput.value = '';
+        setTimeout(() => adminPassInput.focus(), 100);
+      }
+
+      function closeModal() {
+        adminModal.classList.remove('active');
+      }
+
+      modalCloseBtn.addEventListener('click', closeModal);
+      modalCancelBtn.addEventListener('click', closeModal);
+
+      const changePassModal = document.getElementById('change-pass-modal');
+      const changePassForm = document.getElementById('change-pass-form');
+      const newPassInput = document.getElementById('new-pass-input');
+      const confirmPassInput = document.getElementById('confirm-pass-input');
+      const passModalCloseBtn = document.getElementById('pass-modal-close-btn');
+      const passModalCancelBtn = document.getElementById('pass-modal-cancel-btn');
+
+      function openChangePassModal() {
+        changePassModal.classList.add('active');
+        newPassInput.value = '';
+        confirmPassInput.value = '';
+        setTimeout(() => newPassInput.focus(), 100);
+      }
+
+      function closeChangePassModal() {
+        changePassModal.classList.remove('active');
+      }
+
+      passModalCloseBtn.addEventListener('click', closeChangePassModal);
+      passModalCancelBtn.addEventListener('click', closeChangePassModal);
+
+      menuChangePassBtn.addEventListener('click', () => {
+        openChangePassModal();
+        if (navMenu.classList.contains('active')) toggleMenu();
+      });
+
+      // LÓGICA DE CAMBIO DE CLAVE CON CIERRE DE SESIÓN AUTOMÁTICO
+      changePassForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newPass = newPassInput.value.trim();
+        const confirmPass = confirmPassInput.value.trim();
+
+        if (newPass.length < 6) {
+          showToast('La clave debe tener al menos 6 caracteres');
+          return;
+        }
+
+        if (newPass !== confirmPass) {
+          showToast('Las claves no coinciden');
+          return;
+        }
+
+        try {
+          const newHash = hashPassword(newPass);
+          await set(ref(db, 'site_config/admin_pass_hash'), newHash);
+
+          closeChangePassModal();
+          showToast('¡Clave cambiada con éxito! Inicia sesión de nuevo.');
+          logoutAdmin();
+        } catch(err) {
+          showToast('Error al guardar: ' + err.message);
+        }
+      });
+
+      const defaultData = {
+        rates: {
+          buy: "1M Plata = 380 CUP / $1.10 USD",
+          sell: "1M Plata = 420 CUP / $1.25 USD",
+          premium: "Según la cotización oficial del Oro in-game."
+        },
+        methods: {
+          local: "Pagos directos en CUP o saldo bancario MLC.",
+          binance: "Transferencias sin comisiones mediante Pay ID o QR.",
+          ingame: "Intercambio físico de recursos e ítems en zonas seguras."
+        },
+        socials: {
+          tg: "https://t.me/TuGrupo",
+          wa: "https://chat.whatsapp.com/TuEnlace",
+          dc: "https://discord.gg/TuInvitacion",
+          ig: "https://instagram.com/TuPerfil",
+          fb: "https://facebook.com/groups/TuGrupo"
+        }
+      };
+
+      onValue(ref(db, 'site_config'), (snapshot) => {
+        const stored = snapshot.val() || defaultData;
+
+        const buyRate = stored.rates ? (stored.rates.buy || defaultData.rates.buy) : defaultData.rates.buy;
+        const sellRate = stored.rates ? (stored.rates.sell || defaultData.rates.sell) : defaultData.rates.sell;
+        const premiumRate = stored.rates ? (stored.rates.premium || defaultData.rates.premium) : defaultData.rates.premium;
+
+        document.getElementById('display-rate-buy').textContent = buyRate;
+        document.getElementById('display-rate-sell').textContent = sellRate;
+        document.getElementById('display-rate-premium').textContent = premiumRate;
+
+        const localMethod = stored.methods ? (stored.methods.local || defaultData.methods.local) : defaultData.methods.local;
+        const binanceMethod = stored.methods ? (stored.methods.binance || defaultData.methods.binance) : defaultData.methods.binance;
+        const ingameMethod = stored.methods ? (stored.methods.ingame || defaultData.methods.ingame) : defaultData.methods.ingame;
+
+        document.getElementById('display-method-local').textContent = localMethod;
+        document.getElementById('display-method-binance').textContent = binanceMethod;
+        document.getElementById('display-method-ingame').textContent = ingameMethod;
+
+        const socials = stored.socials || defaultData.socials;
+        
+        if(isValidUrl(socials.tg)) document.getElementById('display-link-tg').href = socials.tg;
+        if(isValidUrl(socials.wa)) document.getElementById('display-link-wa').href = socials.wa;
+        if(isValidUrl(socials.dc)) document.getElementById('display-link-dc').href = socials.dc;
+        if(isValidUrl(socials.ig)) document.getElementById('display-link-ig').href = socials.ig;
+        if(isValidUrl(socials.fb)) document.getElementById('display-link-fb').href = socials.fb;
+
+        document.getElementById('edit-rate-buy').value = buyRate;
+        document.getElementById('edit-rate-sell').value = sellRate;
+        document.getElementById('edit-rate-premium').value = premiumRate;
+
+        document.getElementById('edit-method-local').value = localMethod;
+        document.getElementById('edit-method-binance').value = binanceMethod;
+        document.getElementById('edit-method-ingame').value = ingameMethod;
+
+        document.getElementById('edit-social-tg').value = socials.tg || "";
+        document.getElementById('edit-social-wa').value = socials.wa || "";
+        document.getElementById('edit-social-dc').value = socials.dc || "";
+        document.getElementById('edit-social-ig').value = socials.ig || "";
+        document.getElementById('edit-social-fb').value = socials.fb || "";
+      });
+
+      function updateConfig(category, data) {
+        if (!isAdmin) return;
+        set(ref(db, `site_config/${category}`), data)
+          .then(() => showToast('Información actualizada'))
+          .catch((err) => showToast('Error al guardar: ' + err.message));
+      }
+
+      document.getElementById('edit-rates-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        updateConfig('rates', {
+          buy: document.getElementById('edit-rate-buy').value.trim(),
+          sell: document.getElementById('edit-rate-sell').value.trim(),
+          premium: document.getElementById('edit-rate-premium').value.trim()
+        });
+      });
+
+      document.getElementById('edit-methods-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        updateConfig('methods', {
+          local: document.getElementById('edit-method-local').value.trim(),
+          binance: document.getElementById('edit-method-binance').value.trim(),
+          ingame: document.getElementById('edit-method-ingame').value.trim()
+        });
+      });
+
+      document.getElementById('edit-socials-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        updateConfig('socials', {
+          tg: document.getElementById('edit-social-tg').value.trim(),
+          wa: document.getElementById('edit-social-wa').value.trim(),
+          dc: document.getElementById('edit-social-dc').value.trim(),
+          ig: document.getElementById('edit-social-ig').value.trim(),
+          fb: document.getElementById('edit-social-fb').value.trim()
+        });
+      });
+
+      function checkAdminState() {
+        if (isAdmin) {
+          adminCards.forEach(card => card.style.display = 'block');
+          adminTrigger.style.display = 'none';
+          menuChangePassBtn.style.display = 'inline-flex';
+          menuLogoutBtn.style.display = 'inline-flex';
+        } else {
+          adminCards.forEach(card => card.style.display = 'none');
+          adminTrigger.style.display = 'inline-flex';
+          menuChangePassBtn.style.display = 'none';
+          menuLogoutBtn.style.display = 'none';
+        }
+        renderProducts();
+      }
+
+      function logoutAdmin() {
+        isAdmin = false;
+        sessionStorage.removeItem('admin_logged_in');
+        checkAdminState();
+        showToast('Sesión cerrada');
+      }
+
+      adminTrigger.addEventListener('click', openModal);
+
+      // AUTENTICACIÓN ADMIN EN TIEMPO REAL CON FIREBASE
+      adminAuthForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const inputPass = adminPassInput.value.trim();
+        const hashedInput = hashPassword(inputPass);
+
+        loginSubmitBtn.disabled = true;
+        loginSubmitBtn.textContent = 'Verificando...';
+
+        try {
+          const snapshot = await get(ref(db, 'site_config/admin_pass_hash'));
+          const remoteHash = snapshot.val();
+
+          if (remoteHash && hashedInput === remoteHash) {
+            isAdmin = true;
+            sessionStorage.setItem('admin_logged_in', 'true');
+            
+            checkAdminState();
+            closeModal();
+            showSection('mercado');
+            showToast('Modo Administrador activado');
+          } else {
+            showToast('Contraseña incorrecta');
+            adminPassInput.value = '';
+          }
+        } catch (err) {
+          showToast('Error al conectar con la base de datos: ' + err.message);
+        } finally {
+          loginSubmitBtn.disabled = false;
+          loginSubmitBtn.textContent = 'Acceder';
+        }
+      });
+
+      menuLogoutBtn.addEventListener('click', () => {
+        logoutAdmin();
+        if (navMenu.classList.contains('active')) toggleMenu();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+          openModal();
+        }
+      });
+
+      const hamburgerBtn = document.getElementById('hamburger-btn');
+      const navMenu = document.getElementById('nav-menu');
+      const menuOverlay = document.getElementById('menu-overlay');
+      const brandBtn = document.getElementById('brand-btn');
+
+      function toggleMenu() {
+        hamburgerBtn.classList.toggle('active');
+        navMenu.classList.toggle('active');
+        menuOverlay.classList.toggle('active');
+      }
+
+      hamburgerBtn.addEventListener('click', toggleMenu);
+      menuOverlay.addEventListener('click', toggleMenu);
+
+      function showSection(sectionId) {
+        document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('data-target') === sectionId) {
+            link.classList.add('active');
+          }
+        });
+
+        const target = document.getElementById(sectionId);
+        if(target) target.classList.add('active');
+
+        if(navMenu.classList.contains('active')) toggleMenu();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      }
+
+      document.querySelectorAll('.nav-link').forEach(button => {
+        button.addEventListener('click', () => {
+          const target = button.getAttribute('data-target');
+          if(target) showSection(target);
+        });
+      });
+
+      if(brandBtn) {
+        brandBtn.addEventListener('click', () => showSection('inicio'));
+      }
+
+      const toastNotification = document.getElementById('toast-notification');
+      const toastMessage = document.getElementById('toast-message');
+      let toastTimeout;
+
+      function showToast(message) {
+        toastMessage.textContent = message;
+        toastNotification.classList.add('show');
+        
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          toastNotification.classList.remove('show');
+        }, 3000);
+      }
+
+      const socialPlatformSelect = document.getElementById('social-platform');
+      const itemLinkInput = document.getElementById('item-link');
+      const linkHelpSpan = document.getElementById('link-help');
+
+      const socialHelpers = {
+        whatsapp: { placeholder: "https://wa.me/5350000000", help: "Ejemplo: https://wa.me/5350000000 (+53 incluido)" },
+        telegram: { placeholder: "https://t.me/TuUsuario", help: "Ejemplo: https://t.me/TuUsuario" },
+        discord: { placeholder: "https://discord.gg/invitacion", help: "Ejemplo: https://discord.gg/invitacion" },
+        facebook: { placeholder: "https://facebook.com/tuPerfil", help: "Ejemplo: https://facebook.com/tuPerfil" },
+        other: { placeholder: "https://tusitio.com", help: "Enlace completo comenzando con https://" }
+      };
+
+      socialPlatformSelect.addEventListener('change', (e) => {
+        const selected = e.target.value;
+        if (socialHelpers[selected]) {
+          itemLinkInput.placeholder = socialHelpers[selected].placeholder;
+          linkHelpSpan.textContent = socialHelpers[selected].help;
+        }
+      });
+
+      const itemForm = document.getElementById('item-form');
+      const itemsGrid = document.getElementById('items-grid');
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const submitBtn = document.getElementById('submit-btn');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentCategoryFilter = btn.getAttribute('data-category');
+          renderProducts();
+        });
+      });
+
+      function getSocialConfig(platform) {
+        switch(platform) {
+          case 'whatsapp': return { label: 'WhatsApp', class: 'btn-whatsapp', icon: '💬' };
+          case 'telegram': return { label: 'Telegram', class: 'btn-telegram', icon: '✈️' };
+          case 'discord': return { label: 'Discord', class: 'btn-discord', icon: '🎮' };
+          case 'facebook': return { label: 'Facebook', class: 'btn-facebook', icon: '👤' };
+          default: return { label: 'Contactar', class: 'btn-generic', icon: '🔗' };
+        }
+      }
+
+      function getCategoryBadge(category) {
+        switch(category) {
+          case 'silver': return { label: 'Silver', class: 'badge-silver' };
+          case 'items': return { label: 'Ítem', class: 'badge-items' };
+          case 'accounts': return { label: 'Cuenta', class: 'badge-accounts' };
+          case 'services': return { label: 'Servicio', class: 'badge-services' };
+          default: return { label: 'General', class: 'badge-silver' };
+        }
+      }
+
+      function isValidUrl(string) {
+        try {
+          const url = new URL(string);
+          return url.protocol === "http:" || url.protocol === "https:";
+        } catch (_) {
+          return false;  
+        }
+      }
+
+      onValue(ref(db, 'products'), (snapshot) => {
+        const data = snapshot.val();
+        cachedProducts = [];
+        if (data) {
+          Object.keys(data).forEach(key => {
+            cachedProducts.push({
+              id: key,
+              ...data[key]
+            });
+          });
+        }
+        renderProducts();
+      });
+
+      function deleteProduct(id) {
+        if (!isAdmin) return;
+        if (confirm('¿Deseas quitar esta publicación del mercado?')) {
+          remove(ref(db, `products/${id}`))
+            .then(() => showToast('Publicación quitada correctamente'))
+            .catch(err => showToast('Error al quitar: ' + err.message));
+        }
+      }
+
+      function renderProducts() {
+        itemsGrid.innerHTML = '';
+        let items = [...cachedProducts].sort((a, b) => b.timestamp - a.timestamp);
+
+        if (currentCategoryFilter !== 'all') {
+          items = items.filter(item => (item.category || 'silver') === currentCategoryFilter);
+        }
+
+        if(items.length === 0) {
+          const emptyText = document.createElement('p');
+          emptyText.style.color = '#64748b';
+          emptyText.style.gridColumn = '1/-1';
+          emptyText.textContent = 'No hay publicaciones activas en esta categoría en este momento.';
+          itemsGrid.appendChild(emptyText);
+          return;
+        }
+
+        items.forEach((item) => {
+          const card = document.createElement('div');
+          card.className = 'item-card';
+
+          const contentDiv = document.createElement('div');
+
+          const badgeInfo = getCategoryBadge(item.category || 'silver');
+          const badgeSpan = document.createElement('span');
+          badgeSpan.className = `item-badge ${badgeInfo.class}`;
+          badgeSpan.textContent = badgeInfo.label;
+          
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'item-title';
+          titleDiv.textContent = item.title;
+
+          const priceDiv = document.createElement('div');
+          priceDiv.className = 'item-price';
+          priceDiv.textContent = item.price;
+
+          const descDiv = document.createElement('div');
+          descDiv.className = 'item-desc';
+          descDiv.textContent = item.desc || '';
+
+          contentDiv.appendChild(badgeSpan);
+          contentDiv.appendChild(titleDiv);
+          contentDiv.appendChild(priceDiv);
+          contentDiv.appendChild(descDiv);
+
+          const actionsDiv = document.createElement('div');
+          actionsDiv.className = 'item-actions';
+
+          const socialConfig = getSocialConfig(item.platform);
+
+          const contactLink = document.createElement('a');
+          const safeLink = isValidUrl(item.link) ? item.link : '#';
+          contactLink.href = safeLink;
+          contactLink.target = '_blank';
+          contactLink.rel = 'noopener noreferrer';
+          contactLink.className = `btn-contact ${socialConfig.class}`;
+          contactLink.innerHTML = `${socialConfig.icon} ${socialConfig.label}`;
+
+          actionsDiv.appendChild(contactLink);
+
+          if (isAdmin) {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn-delete';
+            deleteBtn.textContent = '🗑️ Eliminar Publicación';
+            deleteBtn.addEventListener('click', () => deleteProduct(item.id));
+            actionsDiv.appendChild(deleteBtn);
+          }
+
+          card.appendChild(contentDiv);
+          card.appendChild(actionsDiv);
+          itemsGrid.appendChild(card);
+        });
+      }
+
+      itemForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if(!isAdmin) {
+          showToast('Acceso denegado');
+          return;
+        }
+
+        const category = document.getElementById('item-category').value;
+        const title = document.getElementById('item-title').value.trim();
+        const price = document.getElementById('item-price').value.trim();
+        const platform = socialPlatformSelect.value;
+        const link = itemLinkInput.value.trim();
+        const desc = document.getElementById('item-desc').value.trim();
+
+        if(!isValidUrl(link)) {
+          showToast('Ingresa un enlace válido comenzando con https://');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Publicando...';
+
+        const newProduct = {
+          category,
+          title,
+          price,
+          platform,
+          link,
+          desc,
+          timestamp: Date.now()
+        };
+
+        try {
+          const productsRef = ref(db, 'products');
+          await push(productsRef, newProduct);
+          itemForm.reset();
+          showToast('Oferta publicada con éxito');
+        } catch (err) {
+          showToast('Error al publicar: ' + err.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Publicar Oferta';
+        }
+      });
+
+      checkAdminState();
+    
+  </script>
+</body>
+</html>
