@@ -1346,7 +1346,7 @@ const db = getDatabase(app);
         document.getElementById('edit-method-binance').value = binanceMethod;
         document.getElementById('edit-method-ingame').value = ingameMethod;
 
-        document.getElementById('edit-social-tg').value = socials.tg || "";
+        document.getElementById('edit-social-tg').value = formatExternalLink(socials.tg || "", 'telegram');
         document.getElementById('edit-social-wa').value = socials.wa || "";
         document.getElementById('edit-social-dc').value = socials.dc || "";
         document.getElementById('edit-social-ig').value = socials.ig || "";
@@ -1381,7 +1381,7 @@ const db = getDatabase(app);
       document.getElementById('edit-socials-form').addEventListener('submit', (e) => {
         e.preventDefault();
         updateConfig('socials', {
-          tg: document.getElementById('edit-social-tg').value.trim(),
+          tg: formatExternalLink(document.getElementById('edit-social-tg').value.trim(), 'telegram'),
           wa: document.getElementById('edit-social-wa').value.trim(),
           dc: document.getElementById('edit-social-dc').value.trim(),
           ig: document.getElementById('edit-social-ig').value.trim(),
@@ -1567,6 +1567,8 @@ const db = getDatabase(app);
       }
 
       function isValidUrl(string) {
+        if (!string) return false;
+        if (string.startsWith('tg://')) return true;
         try {
           const url = new URL(string);
           return url.protocol === "http:" || url.protocol === "https:";
@@ -1577,10 +1579,15 @@ const db = getDatabase(app);
 
       function formatExternalLink(url, platform) {
         if (!url || url === '#') return '#';
-        if (platform === 'telegram') {
-          return url.replace('tg://resolve?domain=', 'https://t.me/').replace('tg://join?invite=', 'https://t.me/+');
+        let formattedUrl = url.trim();
+        if (formattedUrl.startsWith('tg://resolve?domain=')) {
+          formattedUrl = formattedUrl.replace('tg://resolve?domain=', 'https://t.me/');
+        } else if (formattedUrl.startsWith('tg://join?invite=')) {
+          formattedUrl = formattedUrl.replace('tg://join?invite=', 'https://t.me/+');
+        } else if (formattedUrl.startsWith('tg://')) {
+          formattedUrl = formattedUrl.replace('tg://', 'https://t.me/');
         }
-        return url;
+        return formattedUrl;
       }
 
       onValue(ref(db, 'products'), (snapshot) => {
@@ -1692,8 +1699,10 @@ const db = getDatabase(app);
         const title = document.getElementById('item-title').value.trim();
         const price = document.getElementById('item-price').value.trim();
         const platform = socialPlatformSelect.value;
-        const link = itemLinkInput.value.trim();
+        let link = itemLinkInput.value.trim();
         const desc = document.getElementById('item-desc').value.trim();
+
+        link = formatExternalLink(link, platform);
 
         if(!isValidUrl(link)) {
           showToast('Ingresa un enlace válido comenzando con https://');
