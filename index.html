@@ -13,7 +13,7 @@
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="referrer" content="no-referrer-when-downgrade">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -1332,8 +1332,8 @@ const db = getDatabase(app);
 
         const socials = stored.socials || defaultData.socials;
         
-        if(isValidUrl(socials.tg)) document.getElementById('display-link-tg').href = socials.tg;
-        if(isValidUrl(socials.wa)) document.getElementById('display-link-wa').href = socials.wa;
+        if(isValidUrl(socials.tg)) document.getElementById('display-link-tg').href = formatExternalLink(socials.tg, 'telegram');
+        if(isValidUrl(socials.wa)) document.getElementById('display-link-wa').href = formatExternalLink(socials.wa, 'whatsapp');
         if(isValidUrl(socials.dc)) document.getElementById('display-link-dc').href = socials.dc;
         if(isValidUrl(socials.ig)) document.getElementById('display-link-ig').href = socials.ig;
         if(isValidUrl(socials.fb)) document.getElementById('display-link-fb').href = socials.fb;
@@ -1575,6 +1575,14 @@ const db = getDatabase(app);
         }
       }
 
+      function formatExternalLink(url, platform) {
+        if (!url || url === '#') return '#';
+        if (platform === 'telegram') {
+          return url.replace('tg://resolve?domain=', 'https://t.me/').replace('tg://join?invite=', 'https://t.me/+');
+        }
+        return url;
+      }
+
       onValue(ref(db, 'products'), (snapshot) => {
         const data = snapshot.val();
         cachedProducts = [];
@@ -1649,7 +1657,7 @@ const db = getDatabase(app);
           const socialConfig = getSocialConfig(item.platform);
 
           const contactLink = document.createElement('a');
-          const safeLink = isValidUrl(item.link) ? item.link : '#';
+          const safeLink = isValidUrl(item.link) ? formatExternalLink(item.link, item.platform) : '#';
           contactLink.href = safeLink;
           contactLink.target = '_blank';
           contactLink.rel = 'noopener noreferrer';
